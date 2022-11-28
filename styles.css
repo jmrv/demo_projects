@@ -1,0 +1,9 @@
+h1 {
+  color: lightsteelblue;
+}
+
+.card {
+  border: solid;
+  border-color: lightgrey;
+  border-radius: 8px;
+}
