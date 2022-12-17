@@ -40,6 +40,21 @@ const projects = [
 const render = () => {
   var container = document.getElementById("root");
 
+  let visibleProjects = projects;
+
+  //const kinds = new Set(projects.map(p => p.kind));
+  //const years = new Set(projects.map(p => p.year));
+
+  const button = document.createElement("button");
+  button.innerHTML = "Kind Z";
+  button.id = "kind-z";
+  button.onclick = () => {
+    visibleProjects = projects.filter( p => p.kind === "Kind Z" );
+    hideProjects();
+  };
+
+  container.appendChild(button);
+
   function addCardElement(card, kind, content) {
     let element = document.createElement(kind);
     element.innerHTML = content;
@@ -58,6 +73,10 @@ const render = () => {
     addCardElement(card, "p", project["description"]);
 
     container.appendChild(card);
+  }
+
+  function hideProjects() {
+    document.querySelectorAll(".card").forEach( card => card.setAttribute("height", 0) );
   }
 
   function renderProjects() {
