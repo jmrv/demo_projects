@@ -40,7 +40,7 @@ const projects = [
 const render = () => {
   var container = document.getElementById("root");
 
-  let projectVisible = projects.map( p => true );
+  projects.forEach( p => p.visible = true );
 
   //const kinds = new Set(projects.map(p => p.kind));
   //const years = new Set(projects.map(p => p.year));
@@ -49,7 +49,7 @@ const render = () => {
   button.innerHTML = "Kind Z";
   button.id = "kind-z";
   button.onclick = () => {
-    projectVisible = projects.map( p => p.kind === "Kind Z" );
+    projects.forEach( p => p.visible = p.kind === "Kind Z" );
     hideProjects();
   };
 
@@ -58,7 +58,7 @@ const render = () => {
   function hideProjects() {
     projects.forEach( (project, i) => {
       var card = document.getElementById(`project-${i}`);
-      if (projectVisible[i]) {
+      if (project.visible) {
         card.classList.remove("hidden");
       } else {
         card.classList.add("hidden");
