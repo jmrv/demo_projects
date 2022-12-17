@@ -39,26 +39,30 @@ const projects = [
 
 const render = () => {
   var container = document.getElementById("root");
-  var card;
-  var project;
 
-  function addCardElement(kind, key) {
+  function addCardElement(card, kind, content) {
     let element = document.createElement(kind);
-    element.innerHTML = project[key];
+    element.innerHTML = content;
     card.appendChild(element);
   }
 
-  for(let i=0; i<projects.length; i++) {
+  function addCard(project, i) {
     project = projects[i];
     card = document.createElement("div");
     card.setAttribute("id", `project-${i}`);
     card.setAttribute("class", "card");
 
-    addCardElement("h1", "name");
-    addCardElement("h3", "kind");
-    addCardElement("h3", "year");
-    addCardElement("p", "description");
+    addCardElement(card, "h1", project["name"]);
+    addCardElement(card, "h3", project["kind"]);
+    addCardElement(card, "h3", project["year"]);
+    addCardElement(card, "p", project["description"]);
 
     container.appendChild(card);
   }
+
+  function renderProjects() {
+    projects.forEach( (project, i) => addCard(project, i) );
+  }
+
+  renderProjects();
 };
