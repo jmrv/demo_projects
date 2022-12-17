@@ -40,14 +40,16 @@ const projects = [
 const render = () => {
   var container = document.getElementById("root");
 
-  const kinds = new Set(projects.map(p => p.kind));
-  const years = new Set(projects.map(p => p.year));
+  const categories = {
+    kind: new Set(projects.map(p => p.kind)),
+    year: new Set(projects.map(p => p.year)),
+  };
   const filters = { kind: new Set(), year: new Set() };
 
   const buttonID = (key, value) => [key, value].join(" ").replaceAll(" ", "-");
   const projectID = i => `project-${i}`;
 
-  function addButton(key, value) {
+  function addButton(key, value, row) {
     const button = document.createElement("button");
 
     button.id = buttonID(key, value);
@@ -55,7 +57,7 @@ const render = () => {
     button.innerHTML = value;
     button.onclick = () => toggleButton(key, value);
 
-    container.appendChild(button);
+    row.appendChild(button);
   }
 
   function toggleButton(key, value) {
@@ -87,12 +89,17 @@ const render = () => {
   }
 
   function renderButtons() {
-    kinds.forEach( k => addButton("kind", k) );
-    years.forEach( y => addButton("year", y) );
+    Object.entries(categories).map( ([category, values]) => {
+      const row = document.createElement("div");
+      row.id = `button-row-${category}`;
+      values.forEach( value => addButton(category, value, row) );
+
+      container.appendChild(row);
+    });
   }
 
   function addCardElement(card, kind, content) {
-    let element = document.createElement(kind);
+    const element = document.createElement(kind);
     element.innerHTML = content;
     card.appendChild(element);
   }
