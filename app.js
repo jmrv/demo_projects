@@ -42,8 +42,7 @@ const render = () => {
 
   const kinds = new Set(projects.map(p => p.kind));
   const years = new Set(projects.map(p => p.year));
-  const filters = new Set(kinds);
-  years.forEach( y => filters.add(y) );
+  const filters = { kind: new Set(), year: new Set() };
 
   const buttonID = (key, value) => [key, value].join(" ").replaceAll(" ", "-");
   const projectID = i => `project-${i}`;
@@ -52,7 +51,7 @@ const render = () => {
     const button = document.createElement("button");
 
     button.id = buttonID(key, value);
-    button.classList.add("button", "checked");
+    button.classList.add("button", "unchecked");
     button.innerHTML = value;
     button.onclick = () => toggleButton(key, value);
 
@@ -62,9 +61,9 @@ const render = () => {
   function toggleButton(key, value) {
     const id = buttonID(key, value);
     const button = document.getElementById(id);
-    const turnOff = filters.has(value);
+    const turnOff = filters[key].has(value);
 
-    turnOff ? filters.delete(value) : filters.add(value);
+    turnOff ? filters[key].delete(value) : filters[key].add(value);
     button.classList.remove( turnOff ? "checked" : "unchecked" );
     button.classList.add( turnOff ? "unchecked" : "checked" );
 
@@ -74,7 +73,10 @@ const render = () => {
   function showOrHideProjects() {
     projects.forEach( (project, i) => {
       const card = document.getElementById(projectID(i));
-      const visible = filters.has(project.kind) && filters.has(project.year);
+      const visible = (
+        (filters.kind.size === 0 || filters.kind.has(project.kind)) &&
+        (filters.year.size === 0 || filters.year.has(project.year))
+      );
 
       if (visible) {
         card.classList.remove("hidden");
