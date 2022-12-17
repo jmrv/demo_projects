@@ -45,17 +45,27 @@ const render = () => {
   //const kinds = new Set(projects.map(p => p.kind));
   //const years = new Set(projects.map(p => p.year));
 
+  const filters = new Set();
+
   const button = document.createElement("button");
   button.innerHTML = "Kind Z";
   button.id = "kind-z";
+  filters.add("Kind Z");
+
   button.onclick = () => {
-    projects.forEach( p => p.visible = p.kind === "Kind Z" );
-    hideProjects();
+    if (filters.has("Kind Z")) {
+      filters.delete("Kind Z");
+      projects.forEach( p => p.visible = p.kind !== "Kind Z" );
+    } else {
+      filters.add("Kind Z");
+      projects.forEach( p => p.visible = p.kind === "Kind Z" );
+    }
+    showOrHideProjects();
   };
 
   container.appendChild(button);
 
-  function hideProjects() {
+  function showOrHideProjects() {
     projects.forEach( (project, i) => {
       var card = document.getElementById(`project-${i}`);
       if (project.visible) {
@@ -88,7 +98,7 @@ const render = () => {
 
   function renderProjects() {
     projects.forEach( (project, i) => addCard(project, i) );
-    hideProjects();
+    showOrHideProjects();
   }
 
   renderProjects();
