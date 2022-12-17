@@ -7,3 +7,23 @@ h1 {
   border-color: lightgrey;
   border-radius: 8px;
 }
+
+.hidden {
+  display: none;
+}
+
+.button {
+  color: black;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 3px;
+  border: 1px;
+}
+
+.checked {
+  background-color: steelblue;
+}
+
+.unchecked {
+  background-color: lightgray;
+}

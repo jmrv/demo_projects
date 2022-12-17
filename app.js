@@ -40,6 +40,55 @@ const projects = [
 const render = () => {
   var container = document.getElementById("root");
 
+  const kinds = new Set(projects.map(p => p.kind));
+  const years = new Set(projects.map(p => p.year));
+  const filters = new Set(kinds);
+  years.forEach( y => filters.add(y) );
+
+  const buttonID = (key, value) => [key, value].join(" ").replaceAll(" ", "-");
+  const projectID = i => `project-${i}`;
+
+  function addButton(key, value) {
+    const button = document.createElement("button");
+
+    button.id = buttonID(key, value);
+    button.classList.add("button", "checked");
+    button.innerHTML = value;
+    button.onclick = () => toggleButton(key, value);
+
+    container.appendChild(button);
+  }
+
+  function toggleButton(key, value) {
+    const id = buttonID(key, value);
+    const button = document.getElementById(id);
+    const turnOff = filters.has(value);
+
+    turnOff ? filters.delete(value) : filters.add(value);
+    button.classList.remove( turnOff ? "checked" : "unchecked" );
+    button.classList.add( turnOff ? "unchecked" : "checked" );
+
+    showOrHideProjects();
+  }
+
+  function showOrHideProjects() {
+    projects.forEach( (project, i) => {
+      const card = document.getElementById(projectID(i));
+      const visible = filters.has(project.kind) && filters.has(project.year);
+
+      if (visible) {
+        card.classList.remove("hidden");
+      } else {
+        card.classList.add("hidden");
+      }
+    })
+  }
+
+  function renderButtons() {
+    kinds.forEach( k => addButton("kind", k) );
+    years.forEach( y => addButton("year", y) );
+  }
+
   function addCardElement(card, kind, content) {
     let element = document.createElement(kind);
     element.innerHTML = content;
@@ -47,9 +96,9 @@ const render = () => {
   }
 
   function addCard(project, i) {
-    project = projects[i];
-    card = document.createElement("div");
-    card.setAttribute("id", `project-${i}`);
+    var project = projects[i];
+    var card = document.createElement("div");
+    card.setAttribute("id", projectID(i));
     card.setAttribute("class", "card");
 
     addCardElement(card, "h1", project["name"]);
@@ -62,7 +111,9 @@ const render = () => {
 
   function renderProjects() {
     projects.forEach( (project, i) => addCard(project, i) );
+    showOrHideProjects();
   }
 
+  renderButtons();
   renderProjects();
 };
