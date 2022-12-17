@@ -40,7 +40,7 @@ const projects = [
 const render = () => {
   var container = document.getElementById("root");
 
-  let visibleProjects = projects;
+  let projectVisible = projects.map( p => true );
 
   //const kinds = new Set(projects.map(p => p.kind));
   //const years = new Set(projects.map(p => p.year));
@@ -49,11 +49,22 @@ const render = () => {
   button.innerHTML = "Kind Z";
   button.id = "kind-z";
   button.onclick = () => {
-    visibleProjects = projects.filter( p => p.kind === "Kind Z" );
+    projectVisible = projects.map( p => p.kind === "Kind Z" );
     hideProjects();
   };
 
   container.appendChild(button);
+
+  function hideProjects() {
+    projects.forEach( (project, i) => {
+      var card = document.getElementById(`project-${i}`);
+      if (projectVisible[i]) {
+        card.classList.remove("hidden");
+      } else {
+        card.classList.add("hidden");
+      }
+    })
+  }
 
   function addCardElement(card, kind, content) {
     let element = document.createElement(kind);
@@ -62,8 +73,8 @@ const render = () => {
   }
 
   function addCard(project, i) {
-    project = projects[i];
-    card = document.createElement("div");
+    var project = projects[i];
+    var card = document.createElement("div");
     card.setAttribute("id", `project-${i}`);
     card.setAttribute("class", "card");
 
@@ -75,12 +86,9 @@ const render = () => {
     container.appendChild(card);
   }
 
-  function hideProjects() {
-    document.querySelectorAll(".card").forEach( card => card.setAttribute("height", 0) );
-  }
-
   function renderProjects() {
     projects.forEach( (project, i) => addCard(project, i) );
+    hideProjects();
   }
 
   renderProjects();

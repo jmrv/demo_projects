@@ -7,3 +7,7 @@ h1 {
   border-color: lightgrey;
   border-radius: 8px;
 }
+
+.hidden {
+  display: none;
+}
