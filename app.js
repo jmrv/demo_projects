@@ -42,44 +42,23 @@ const render = () => {
   var card;
   var project;
 
-  let visibleProjects = projects;
-
-  //const kinds = new Set(projects.map(p => p.kind));
-  //const years = new Set(projects.map(p => p.year));
-
-  const button = document.createElement("button");
-  button.innerHTML = "Kind Z";
-  button.id = "kind-z";
-  button.onclick = () => {
-    visibleProjects = projects.filter(p => p.kind === "Kind Z");
-    renderProjects();
-  };
-
-  container.appendChild(button);
-
   function addCardElement(kind, key) {
     let element = document.createElement(kind);
     element.innerHTML = project[key];
     card.appendChild(element);
   }
 
-  function renderProjects() {
-    document.querySelectorAll(".card").forEach(e => e.remove());
+  for(let i=0; i<projects.length; i++) {
+    project = projects[i];
+    card = document.createElement("div");
+    card.setAttribute("id", `project-${i}`);
+    card.setAttribute("class", "card");
 
-    for(let i=0; i<visibleProjects.length; i++) {
-      project = visibleProjects[i];
-      card = document.createElement("div");
-      card.setAttribute("id", `project-${i}`);
-      card.setAttribute("class", "card");
+    addCardElement("h1", "name");
+    addCardElement("h3", "kind");
+    addCardElement("h3", "year");
+    addCardElement("p", "description");
 
-      addCardElement("h1", "name");
-      addCardElement("h3", "kind");
-      addCardElement("h3", "year");
-      addCardElement("p", "description");
-
-      container.appendChild(card);
-    }
+    container.appendChild(card);
   }
-
-  renderProjects();
 };
