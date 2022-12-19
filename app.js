@@ -104,10 +104,35 @@ const render = () => {
     });
   }
 
-  function addCardElement(card, kind, content) {
-    const element = document.createElement(kind);
-    element.innerHTML = content;
-    card.appendChild(element);
+  function makeCardImage(project) {
+    const cardImage = document.createElement("div");
+    cardImage.setAttribute("class", "card-image");
+
+    const image = document.createElement("img");
+    image.src = project.image;
+    image.alt = project.name;
+
+    cardImage.appendChild(image);
+
+    return cardImage;
+  }
+
+  function makeCardBody(project) {
+    const cardBody = document.createElement("div");
+    cardBody.setAttribute("class", "card-body");
+
+    function addCardElement(kind, content) {
+      const element = document.createElement(kind);
+      element.innerHTML = content;
+      cardBody.appendChild(element);
+    }
+
+    addCardElement("h1", project.name);
+    addCardElement("h3", project.kind);
+    addCardElement("h3", project.year);
+    addCardElement("p", project.description);
+
+    return cardBody;
   }
 
   function addCard(project, i) {
@@ -116,15 +141,8 @@ const render = () => {
     card.setAttribute("id", projectID(i));
     card.setAttribute("class", "card");
 
-    const image = document.createElement("img");
-    image.src = project.image;
-    image.alt = project.name;
-    card.appendChild(image);
-
-    addCardElement(card, "h1", project["name"]);
-    addCardElement(card, "h3", project["kind"]);
-    addCardElement(card, "h3", project["year"]);
-    addCardElement(card, "p", project["description"]);
+    card.appendChild( makeCardImage(project) );
+    card.appendChild( makeCardBody(project) );
 
     container.appendChild(card);
   }
