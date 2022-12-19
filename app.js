@@ -66,6 +66,22 @@ const render = () => {
     row.appendChild(button);
   }
 
+  function addAllButton() {
+    const row = document.createElement("div");
+    row.id = "button-row-all";
+    row.setAttribute("class", "button-row");
+    const button = document.createElement("button");
+
+    button.id = "all-values";
+    button.classList.add("button", "checked");
+    button.innerHTML = "All";
+    button.onclick = () => toggleAllButton(true);
+
+    row.appendChild(button);
+
+    return row;
+  }
+
   function toggleButton(key, value) {
     const id = buttonID(key, value);
     const button = document.getElementById(id);
@@ -74,6 +90,23 @@ const render = () => {
     turnOff ? filters[key].delete(value) : filters[key].add(value);
     button.classList.remove( turnOff ? "checked" : "unchecked" );
     button.classList.add( turnOff ? "unchecked" : "checked" );
+
+    toggleAllButton(false);
+    showOrHideProjects();
+  }
+
+  function toggleAllButton(clicked) {
+    const button = document.getElementById("all-values");
+
+    if (clicked) {
+      filters.kind.forEach( value => toggleButton("kind", value) );
+      filters.year.forEach( value => toggleButton("year", value) );
+      filters.kind.clear();
+      filters.year.clear();
+    }
+
+    button.classList.add( clicked ? "checked" : "unchecked" );
+    button.classList.remove( clicked ? "unchecked" : "checked" );
 
     showOrHideProjects();
   }
@@ -95,9 +128,12 @@ const render = () => {
   }
 
   function renderButtons() {
+    container.appendChild( addAllButton() );
+
     Object.entries(categories).map( ([category, values]) => {
       const row = document.createElement("div");
       row.id = `button-row-${category}`;
+      row.setAttribute("class", "button-row");
       values.forEach( value => addButton(category, value, row) );
 
       container.appendChild(row);
